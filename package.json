@@ -1,5 +1,6 @@
 {
-  "name": "bot",
+  "private": true,
+  "name": "bot-typescript",
   "version": "1.0.0",
   "main": "index.js",
   "repository": {},

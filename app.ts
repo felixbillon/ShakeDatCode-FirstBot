@@ -8,7 +8,7 @@ import * as builder from 'botbuilder';
 // Setup Restify Server
 let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
-    console.log('%s listening to %s', server.name, server.url);
+    console.log(`${server.name} listening to ${server.url}`);
 });
 
 // Create chat bot
@@ -23,6 +23,17 @@ bot.dialog('/', [
         builder.Prompts.text(session, 'Hi! What is your name?');
     },
     (session, results) => {
-        session.send('Hello %s!', results.response);
+        session.userData.name = results.response;
+        session.send(`Hello ${session.userData.name}`);
+        session.beginDialog('/askAge', session.userData.name);
+    }
+]);
+bot.dialog('/askAge', [
+    (session, args, next) => {
+        session.dialogData.name = args || {};
+        builder.Prompts.text(session, `${session.dialogData.name} how old are you ?`);
+    },
+    (session, results) => {
+        session.send(`${session.dialogData.name} you're ${results.response}`);
     }
 ]);
