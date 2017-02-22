@@ -23,9 +23,12 @@ bot.dialog('/', [
         builder.Prompts.text(session, 'Hi! What is your name?');
     },
     (session, results) => {
-        session.userData.name = results.response;
-        session.send(`Hello ${session.userData.name}`);
-        session.beginDialog('/askAge', session.userData.name);
+        session.dialogData.name = results.response;
+        session.send(`Hello ${session.dialogData.name}`);
+        session.beginDialog('/askAge', session.dialogData.name);
+    },
+     (session) => {
+         session.endDialog('Goodbye !');
     }
 ]);
 bot.dialog('/askAge', [
@@ -35,5 +38,6 @@ bot.dialog('/askAge', [
     },
     (session, results) => {
         session.send(`${session.dialogData.name} you're ${results.response}`);
+        session.endDialog();
     }
 ]);
